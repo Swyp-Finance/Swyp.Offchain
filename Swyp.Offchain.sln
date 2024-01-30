@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.002.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{79191710-ACB6-4945-91F5-C444E41813EA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Swyp.Sync", "src\Swyp.Sync\Swyp.Sync.csproj", "{C2667123-7E5D-4D4F-A086-14A715B09987}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Swyp.Data", "src\Swyp.Data\Swyp.Data.csproj", "{0CA76507-EA0C-4D37-BFA6-CAC7973F0EAC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C2667123-7E5D-4D4F-A086-14A715B09987}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C2667123-7E5D-4D4F-A086-14A715B09987}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C2667123-7E5D-4D4F-A086-14A715B09987}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C2667123-7E5D-4D4F-A086-14A715B09987}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0CA76507-EA0C-4D37-BFA6-CAC7973F0EAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0CA76507-EA0C-4D37-BFA6-CAC7973F0EAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0CA76507-EA0C-4D37-BFA6-CAC7973F0EAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0CA76507-EA0C-4D37-BFA6-CAC7973F0EAC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C2667123-7E5D-4D4F-A086-14A715B09987} = {79191710-ACB6-4945-91F5-C444E41813EA}
+		{0CA76507-EA0C-4D37-BFA6-CAC7973F0EAC} = {79191710-ACB6-4945-91F5-C444E41813EA}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8D2C6D94-9259-455F-A240-13D9DAE03BDE}
+	EndGlobalSection
+EndGlobal
