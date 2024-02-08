@@ -9,17 +9,14 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.1" />
+    <PackageReference Include="SAIB.Cardano.Sync" Version="0.2.2-alpha" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.1">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
-    <PackageReference Include="Pallas.NET" Version="0.1.11" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Swyp.Data\Swyp.Data.csproj" />
+    <PackageReference Include="Pallas.NET" Version="0.1.14" />
   </ItemGroup>
 
 </Project>

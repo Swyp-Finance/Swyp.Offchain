@@ -1,4 +1,6 @@
-namespace Swyp.Data.Models;
+using Cardano.Sync.Data.Models;
+
+namespace Swyp.Sync.Data.Models;
 
 public record class TbcByAddress
 {
