@@ -40,34 +40,11 @@ public class TeddyAddressReducer(
 
     public async Task ProcessInputAsync(NextResponse response, SwypDbContext _dbContext)
     {
-        var allInputPairs = new List<string>();
-
-        foreach (var txBody in response.Block.TransactionBodies)
-        {
-            var inputPairs = txBody.Inputs.Select(i => i.Id.ToHex() + "_" + i.Index.ToString());
-            allInputPairs.AddRange(inputPairs);
-        }
-
-        var resolvedInputsList = await _dbContext.TransactionOutputs
-        .Where(o => allInputPairs.Contains(o.Id + "_" + o.Index.ToString()))
-        .AsNoTracking()
-        .ToListAsync();
-
-        var txBodyResolvedInputsDict = new Dictionary<string, List<TransactionOutput>>();
-
-        var uniqueAddresses = resolvedInputsList.Select(o => o.Address).Distinct().ToList();
-
-        var latestTeddyByAddress = await _dbContext.TeddyByAddress
-            .Where(tba => uniqueAddresses.Contains(tba.Address))
-            .GroupBy(tba => tba.Address)
-            .Select(g => g.OrderByDescending(tba => tba.Slot).First())
-            .ToListAsync();
-
         foreach (var txBody in response.Block.TransactionBodies)
         {
             foreach (var input in txBody.Inputs)
             {
-                var resolvedInputOutput = resolvedInputsList.FirstOrDefault(o => o.Id == input.Id.ToHex() && o.Index == input.Index);
+                var resolvedInputOutput = await _dbContext.TransactionOutputs.FirstOrDefaultAsync(o => o.Id == input.Id.ToHex() && o.Index == input.Index);
                 if (resolvedInputOutput is not null)
                 {
                     if (resolvedInputOutput.Amount.MultiAsset.TryGetValue(TedyPolicyId, out Dictionary<string, ulong>? tokenBundle))
@@ -76,10 +53,10 @@ public class TeddyAddressReducer(
 
                         if (teddyAsset is not null)
                         {
-                            var latestTedyByAddress = latestTeddyByAddress.FirstOrDefault(tba => tba.Address == resolvedInputOutput.Address)
-                                ?? _dbContext.TeddyByAddress.Local.OrderByDescending(tba => tba.Slot).FirstOrDefault(tba => tba.Address == resolvedInputOutput.Address);
+                            var latestTedyByAddress = _dbContext.TeddyByAddress.Local.OrderByDescending(tba => tba.Slot).FirstOrDefault(tba => tba.Address == resolvedInputOutput.Address) ??
+                                await _dbContext.TeddyByAddress.OrderByDescending(tba => tba.Slot).FirstOrDefaultAsync(tba => tba.Address == resolvedInputOutput.Address);
 
-                            var latestAmount = latestTedyByAddress?.Amount - teddyAsset ?? 0;
+                            var latestAmount = latestTedyByAddress?.Amount - teddyAsset ?? 0 - (ulong)teddyAsset;
 
                             if (latestTedyByAddress is not null && latestTedyByAddress.Slot == response.Block.Slot)
                             {
@@ -125,10 +102,10 @@ public class TeddyAddressReducer(
 
                     if (teddyAsset is not null)
                     {
-                        var latestTeddyByAddress = latestTeddyByAddresses.FirstOrDefault(tba => tba.Address == outputEntity.Address)
-                            ?? _dbContext.TeddyByAddress.Local.OrderByDescending(tba => tba.Slot).FirstOrDefault(tba => tba.Address == outputEntity.Address);
+                        var latestTeddyByAddress = _dbContext.TeddyByAddress.Local.OrderByDescending(tba => tba.Slot).FirstOrDefault(tba => tba.Address == outputEntity.Address) 
+                            ?? latestTeddyByAddresses.FirstOrDefault(tba => tba.Address == outputEntity.Address);
 
-                        var latestAmount = latestTeddyByAddress?.Amount + teddyAsset ?? 0;
+                        var latestAmount = latestTeddyByAddress?.Amount + teddyAsset ?? (ulong)teddyAsset;
 
                         if (latestTeddyByAddress is not null && latestTeddyByAddress.Slot == response.Block.Slot)
                         {

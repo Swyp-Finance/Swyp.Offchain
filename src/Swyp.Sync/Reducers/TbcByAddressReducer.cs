@@ -39,38 +39,16 @@ public class TbcByAddressReducer(
 
     public async Task ProcessInputAsync(NextResponse response, SwypDbContext _dbContext)
     {
-        var allInputPairs = new List<string>();
-
-        foreach (var txBody in response.Block.TransactionBodies)
-        {
-            var inputPairs = txBody.Inputs.Select(i => i.Id.ToHex() + "_" + i.Index.ToString());
-            allInputPairs.AddRange(inputPairs);
-        }
-
-        var resolvedInputsList = await _dbContext.TransactionOutputs
-        .Where(o => allInputPairs.Contains(o.Id + "_" + o.Index.ToString()))
-        .AsNoTracking()
-        .ToListAsync();
-
-        var txBodyResolvedInputsDict = new Dictionary<string, List<TransactionOutput>>();
-
-        var addressList = resolvedInputsList.Select(o => o.Address).Distinct().ToList();
-
-        var latestTbcByAddress = await _dbContext.TbcByAddress
-            .Where(tba => addressList.Contains(tba.Address))
-            .GroupBy(tba => tba.Address).Select(g => g.OrderByDescending(tba => tba.Slot).FirstOrDefault())
-            .ToListAsync();
-
         foreach (var txBody in response.Block.TransactionBodies)
         {
             foreach (var input in txBody.Inputs)
             {
-                var resolvedOutput = resolvedInputsList.FirstOrDefault(o => o.Id == input.Id.ToHex() && o.Index == input.Index);
+                var resolvedOutput = await _dbContext.TransactionOutputs.FirstOrDefaultAsync(o => o.Id == input.Id.ToHex() && o.Index == input.Index);
 
                 if (resolvedOutput is null) continue;
 
                 var currentTbc = _dbContext.TbcByAddress.Local.OrderByDescending(tba => tba.Slot).FirstOrDefault(t => t.Address == resolvedOutput.Address && t.Slot <= response.Block.Slot)
-                    ?? latestTbcByAddress.FirstOrDefault(t => t is not null && t.Address == resolvedOutput.Address && t.Slot <= response.Block.Slot);
+                    ?? await _dbContext.TbcByAddress.OrderByDescending(tba => tba.Slot).FirstOrDefaultAsync(t => t.Address == resolvedOutput.Address && t.Slot <= response.Block.Slot);
 
                 var assets = new Dictionary<string, Dictionary<string, ulong>>();
 
