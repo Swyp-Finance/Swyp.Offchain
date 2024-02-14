@@ -9,10 +9,11 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddCardanoIndexer<SwypDbContext>(builder.Configuration, 30);
+builder.Services.AddCardanoIndexer<SwypDbContext>(builder.Configuration, 1000);
 
 builder.Services.AddSingleton<IReducer, TbcByAddressReducer>();
 builder.Services.AddSingleton<IReducer, TeddyAddressReducer>();
+builder.Services.AddSingleton<IReducer, TeddyAdaLiquidityBySlotReducer>();
 
 var app = builder.Build();
 
