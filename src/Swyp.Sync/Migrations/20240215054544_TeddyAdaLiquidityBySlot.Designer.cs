@@ -2,6 +2,7 @@
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Swyp.Sync.Data;
@@ -11,9 +12,11 @@ using Swyp.Sync.Data;
 namespace Swyp.Sync.Migrations
 {
     [DbContext(typeof(SwypDbContext))]
-    partial class SwypDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240215054544_TeddyAdaLiquidityBySlot")]
+    partial class TeddyAdaLiquidityBySlot
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
